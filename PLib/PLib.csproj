@@ -39,6 +39,7 @@ Contains methods aimed at improving cross-mod compatibility, in-game user interf
     <ProjectReference Include="../PLibAVC/PLibAVC.csproj" PrivateAssets="all" />
     <ProjectReference Include="../PLibBuildings/PLibBuildings.csproj" PrivateAssets="all" />
     <ProjectReference Include="../PLibDatabase/PLibDatabase.csproj" PrivateAssets="all" />
+    <ProjectReference Include="../PLibElements/PLibElements.csproj" PrivateAssets="all" />
     <ProjectReference Include="../PLibLighting/PLibLighting.csproj" PrivateAssets="all" />
     <ProjectReference Include="../PLibOptions/PLibOptions.csproj" PrivateAssets="all" />
     <ProjectReference Include="../PLibUI/PLibUI.csproj" PrivateAssets="all" />
