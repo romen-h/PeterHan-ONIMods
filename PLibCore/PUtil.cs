@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using PeterHan.PLib.Detours;
 using UnityEngine;
 
 namespace PeterHan.PLib.Core {
@@ -50,11 +51,18 @@ namespace PeterHan.PLib.Core {
 		/// </summary>
 		private static readonly HashSet<char> INVALID_FILE_CHARS;
 
+		private delegate int HashFunction(string str);
+		/// <summary>
+		/// Detour of the game's hash method so that PUtil can provide a safer wrapper for it.
+		/// </summary>
+		private static readonly DetouredMethod<HashFunction> SDBMLOWER_HASH_FUNCTION;
+
 		static PUtil() {
 			initialized = false;
 			initializeLock = new object();
 			INVALID_FILE_CHARS = new HashSet<char>(Path.GetInvalidFileNameChars());
 			GameVersion = GetGameVersion();
+			SDBMLOWER_HASH_FUNCTION = PDetours.DetourLazy<HashFunction>(typeof(Hash), nameof(Hash.SDBMLower));
 		}
 
 		/// <summary>
@@ -248,6 +256,16 @@ namespace PeterHan.PLib.Core {
 			watch.Stop();
 			LogDebug("{1} took {0:D} us".F(watch.ElapsedTicks * 1000000L / System.Diagnostics.
 				Stopwatch.Frequency, header));
+		}
+
+		/// <summary>
+		/// Uses the game's hashing function via detours.
+		/// </summary>
+		/// <param name="str">A string to be hashed.</param>
+		/// <returns>The hash of the given string.</returns>
+		public static int SDBMLowerHash(string str)
+		{
+			return SDBMLOWER_HASH_FUNCTION.Invoke(str);
 		}
 	}
 }
